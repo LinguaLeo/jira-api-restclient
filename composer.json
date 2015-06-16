@@ -1,5 +1,5 @@
 {
-    "name": "chobie/jira-api-restclient",
+    "name": "lingualeo/jira-api-restclient",
     "description": "JIRA REST API.",
     "keywords": ["jira","rest","api"],
     "type": "library",
@@ -9,6 +9,10 @@
             "name": "Shuhei Tanuma",
             "homepage": "http://chobie.github.io/",
             "email": "chobieeee@php.net"
+        },
+        {
+          "name": "Mike Kabischev",
+          "homepage": "https://github.com/mkabischev"
         }
     ],
     "minimum-stability": "dev",

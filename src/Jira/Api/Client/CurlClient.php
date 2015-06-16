@@ -33,10 +33,18 @@ use chobie\Jira\Api\UnauthorizedException;
 class CurlClient implements ClientInterface
 {
     /**
-     * create a traditional php client
+     * @var int request timeout
      */
-    public function __construct()
+    private $timeout;
+
+    /**
+     * create a traditional php client
+     *
+     * @param int $timeout
+     */
+    public function __construct($timeout = 5)
     {
+        $this->timeout = $timeout;
     }
 
     /**
@@ -50,7 +58,7 @@ class CurlClient implements ClientInterface
      * @return array|string
      * @throws Exception
      */
-    public function sendRequest($method, $url, $data = array(), $endpoint, AuthenticationInterface $credential, $isFile = false, $debug = false)
+    public function sendRequest($method, $url, $data = [], $endpoint, AuthenticationInterface $credential, $isFile = false, $debug = false)
     {
         if (!($credential instanceof Basic)) {
             throw new \Exception(sprintf("CurlClient does not support %s authentication.", get_class($credential)));
@@ -70,10 +78,11 @@ class CurlClient implements ClientInterface
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($curl, CURLOPT_VERBOSE, $debug);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
         if ($isFile) {
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Atlassian-Token: nocheck'));
+            curl_setopt($curl, CURLOPT_HTTPHEADER, ['X-Atlassian-Token: nocheck']);
         } else {
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json;charset=UTF-8"));
+            curl_setopt($curl, CURLOPT_HTTPHEADER, ["Content-Type: application/json;charset=UTF-8"]);
         }
         if ($method == "POST") {
             curl_setopt($curl, CURLOPT_POST, 1);
